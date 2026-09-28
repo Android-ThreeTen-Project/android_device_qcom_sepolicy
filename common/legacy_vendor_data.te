@@ -1,0 +1,121 @@
+# Keep Qualcomm vendor data below /data/vendor separate from core /data types.
+type audio_vendor_data_file, file_type, data_file_type;
+type bluetooth_vendor_data_file, file_type, data_file_type;
+type bluetooth_vendor_logs_data_file, file_type, data_file_type;
+type media_vendor_data_file, file_type, data_file_type;
+type cnd_vendor_data_file, file_type, data_file_type;
+type display_vendor_runtime_data_file, file_type, data_file_type;
+type iop_vendor_data_file, file_type, data_file_type;
+type location_vendor_data_file, file_type, data_file_type;
+type location_vendor_socket, file_type, data_file_type;
+type mpctl_vendor_data_file, file_type, data_file_type;
+type port_bridge_vendor_data_file, file_type, data_file_type;
+
+allow usf audio_vendor_data_file:sock_file write;
+allow usf audio_vendor_data_file:dir r_dir_perms;
+allow audioserver audio_vendor_data_file:sock_file { create setattr unlink };
+allow audioserver audio_vendor_data_file:dir remove_name;
+allow hal_audio_default audio_vendor_data_file:dir rw_dir_perms;
+allow hal_audio_default audio_vendor_data_file:file create_file_perms;
+allow mediaserver audio_vendor_data_file:sock_file { create setattr unlink };
+allow mediaserver audio_vendor_data_file:dir remove_name;
+
+allow wcnss_filter bluetooth_vendor_data_file:dir create_dir_perms;
+allow wcnss_filter bluetooth_vendor_data_file:file create_file_perms;
+allow mmi bluetooth_vendor_data_file:dir rw_dir_perms;
+allow mmi bluetooth_vendor_data_file:file create_file_perms;
+allow hal_bluetooth_qti bluetooth_vendor_data_file:dir ra_dir_perms;
+allow hal_bluetooth_qti bluetooth_vendor_data_file:file create_file_perms;
+allow hal_bluetooth_qti bluetooth_vendor_logs_data_file:dir rw_dir_perms;
+allow hal_bluetooth_qti bluetooth_vendor_logs_data_file:file create_file_perms;
+
+allow mediacodec media_vendor_data_file:dir create_dir_perms;
+allow mediacodec media_vendor_data_file:file create_file_perms;
+allow hal_drm_default media_vendor_data_file:dir create_dir_perms;
+allow hal_drm_default media_vendor_data_file:file create_file_perms;
+
+# Preserve existing access for matching /data/vendor paths.
+
+# cnd.te
+allow cnd cnd_vendor_data_file:file create_file_perms;
+allow cnd cnd_vendor_data_file:sock_file { unlink create setattr };
+allow cnd cnd_vendor_data_file:dir rw_dir_perms;
+
+# dataservice_app.te
+allow dataservice_app cnd_vendor_data_file:file r_file_perms;
+allow dataservice_app cnd_vendor_data_file:dir search;
+
+# hal_gnss_qti.te
+allow hal_gnss location_vendor_data_file:dir { rw_dir_perms };
+allow hal_gnss location_vendor_data_file:file create_file_perms;
+allow hal_gnss location_vendor_data_file:sock_file { create unlink };
+allow hal_gnss location_vendor_socket:sock_file create_file_perms;
+allow hal_gnss location_vendor_socket:dir rw_dir_perms;
+
+# hal_graphics_composer.te
+allow hal_graphics_composer display_vendor_runtime_data_file:dir create_dir_perms;
+allow hal_graphics_composer display_vendor_runtime_data_file:file create_file_perms;
+
+# hal_iop_default.te
+allow hal_iop_default iop_vendor_data_file:dir rw_dir_perms;
+allow hal_iop_default iop_vendor_data_file:file create_file_perms;
+
+# hal_perf_default.te
+allow hal_perf_default mpctl_vendor_data_file:dir rw_dir_perms;
+allow hal_perf_default mpctl_vendor_data_file:file create_file_perms;
+
+# hal_wifi.te
+allow hal_wifi_default location_vendor_data_file:dir search;
+allow hal_wifi_default location_vendor_socket:sock_file write;
+
+# init_shell.te
+allow qti_init_shell mpctl_vendor_data_file:dir w_dir_perms;
+allow qti_init_shell mpctl_vendor_data_file:file { write getattr unlink };
+
+# location.te
+type_transition location location_vendor_data_file:sock_file location_vendor_socket;
+allow location location_vendor_data_file:dir create_dir_perms;
+allow location location_vendor_data_file:{ file fifo_file } create_file_perms;
+allow location location_vendor_data_file:sock_file { write unlink };
+allow location location_vendor_socket:sock_file create_file_perms;
+allow location location_vendor_socket:dir rw_dir_perms;
+
+# location_app.te
+allow location_app location_vendor_data_file:dir rw_dir_perms;
+allow location_app location_vendor_data_file:sock_file create_file_perms;
+
+# mlid.te
+allow mlid location_vendor_data_file:dir r_dir_perms;
+
+# mm-pp-daemon.te
+allow mm-pp-daemon display_vendor_runtime_data_file:dir create_dir_perms;
+allow mm-pp-daemon display_vendor_runtime_data_file:file create_file_perms;
+
+# mmi.te
+allow mmi location_vendor_data_file:fifo_file create_file_perms;
+allow mmi location_vendor_data_file:dir create_dir_perms;
+allow mmi location_vendor_data_file:file create_file_perms;
+
+# mpdecision.te
+allow mpdecision mpctl_vendor_data_file:dir rw_dir_perms;
+allow mpdecision mpctl_vendor_data_file:file create_file_perms;
+
+# port-bridge.te
+allow port-bridge port_bridge_vendor_data_file:file create_file_perms;
+allow port-bridge port_bridge_vendor_data_file:dir w_dir_perms;
+
+# surfaceflinger.te
+allow surfaceflinger display_vendor_runtime_data_file:dir create_dir_perms;
+allow surfaceflinger display_vendor_runtime_data_file:file create_file_perms;
+
+# system_app.te
+allow system_app cnd_vendor_data_file:dir w_dir_perms;
+allow system_app cnd_vendor_data_file:file create_file_perms;
+
+# system_server.te
+allow system_server cnd_vendor_data_file:dir rw_dir_perms;
+allow system_server cnd_vendor_data_file:file create_file_perms;
+type_transition system_server location_vendor_data_file:sock_file location_vendor_socket "location-mq-s";
+type_transition system_server location_vendor_data_file:sock_file location_vendor_socket "alarm_svc";
+allow system_server location_vendor_data_file:{ file fifo_file } create_file_perms;
+allow system_server location_vendor_data_file:dir create_dir_perms;
