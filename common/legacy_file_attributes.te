@@ -1,0 +1,37 @@
+# Legacy Qualcomm labels retained on core /data paths.
+typeattribute audio_pp_data_file core_data_file_type;
+typeattribute camera_socket core_data_file_type;
+typeattribute cnd_data_file core_data_file_type;
+typeattribute data_qsee_file core_data_file_type;
+typeattribute data_test_data_file core_data_file_type;
+typeattribute diag_data_file core_data_file_type;
+typeattribute display_vendor_data_file core_data_file_type;
+typeattribute dts_data_file core_data_file_type;
+typeattribute dynamic_nv_data_file core_data_file_type;
+typeattribute fm_data_file core_data_file_type;
+typeattribute iop_data_file core_data_file_type;
+typeattribute ipacm_data_file core_data_file_type;
+typeattribute location_data_file core_data_file_type;
+typeattribute location_socket core_data_file_type;
+typeattribute mmi_data_file core_data_file_type;
+typeattribute mpctl_data_file core_data_file_type;
+typeattribute mpctl_socket core_data_file_type;
+typeattribute port_bridge_data_file core_data_file_type;
+typeattribute qlogd_data_file core_data_file_type;
+typeattribute qvop-daemon_data_file core_data_file_type;
+typeattribute rfs_file core_data_file_type;
+typeattribute rfs_shared_hlos_file core_data_file_type;
+typeattribute sensors_data_file core_data_file_type;
+typeattribute spss_data_file core_data_file_type;
+typeattribute ssr_ramdump_data_file core_data_file_type;
+typeattribute swap_data_file core_data_file_type;
+typeattribute usf_data_file core_data_file_type;
+
+# File contexts shared by legacy devices across current partitions.
+typeattribute proc_audiod proc_type;
+typeattribute proc_dirty_ratio proc_type;
+typeattribute firmware_file system_file_type;
+typeattribute firmware_file vendor_file_type;
+typeattribute rfs_system_file system_file_type;
+typeattribute hbtp_cfg_file vendor_file_type;
+typeattribute regionalization_file vendor_file_type;
